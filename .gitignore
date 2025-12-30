@@ -1,0 +1,28 @@
+# data / datasets
+data/
+datasets/
+*.csv
+*.parquet
+*.zip
+*.tar
+*.gz
+
+# videos / images
+*.mp4
+*.mov
+*.avi
+
+# model artifacts
+*.pt
+*.pth
+*.onnx
+*.h5
+*.pkl
+*.joblib
+
+# notebooks checkpoints
+.ipynb_checkpoints/
+
+# OS cruft
+.DS_Store
+
