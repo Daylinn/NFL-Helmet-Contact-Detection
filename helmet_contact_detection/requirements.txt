@@ -5,7 +5,7 @@ python-multipart==0.0.6
 pydantic==2.5.3
 
 # Computer Vision and ML
-ultralytics==8.1.0
+ultralytics==8.3.0
 opencv-python-headless==4.9.0.80
 pillow==10.2.0
 numpy==1.26.3
