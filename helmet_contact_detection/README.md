@@ -1,6 +1,6 @@
 # NFL Helmet Contact Detection API
 
-A production-ready FastAPI service for detecting helmets and predicting contact/impact events in NFL game footage using YOLO-based object detection.
+A FastAPI-based MVP demo for detecting helmets and predicting contact/impact events in NFL game footage using YOLO-based object detection.
 
 ## Features
 
@@ -9,7 +9,7 @@ A production-ready FastAPI service for detecting helmets and predicting contact/
 - **RESTful API**: FastAPI endpoints for single-frame and video clip inference
 - **Docker Deployment**: CPU-optimized containerized deployment
 - **Type Safety**: Pydantic schemas for request/response validation
-- **Production Ready**: Health checks, error handling, and comprehensive logging
+- **Health Checks**: Basic health endpoint and error handling
 
 ## Quick Start
 
@@ -52,7 +52,8 @@ curl http://localhost:8000/health
 ```json
 {
   "status": "healthy",
-  "model_loaded": true,
+  "weights_loaded": true,
+  "message": "Model weights loaded and ready for inference",
   "version": "1.0.0"
 }
 ```
@@ -182,7 +183,7 @@ PORT=8000
 
 ### Option 1: Use Placeholder (Demo Mode)
 
-The repository includes a placeholder `models/weights.pt` file. The API will start but predictions will fail until real weights are provided.
+The API will start without weights but predictions will return HTTP 503 errors until real weights are provided.
 
 ### Option 2: Train Your Own Model
 
@@ -198,6 +199,43 @@ If you have access to pre-trained YOLO weights:
 1. Place the `.pt` file at `models/weights.pt`
 2. Ensure the model was trained on helmet detection
 3. Rebuild the Docker image
+
+## Adding Weights
+
+### Option A: Build weights into the image
+
+Place your `weights.pt` file in the `models/` directory before building:
+
+```bash
+# Copy your weights
+cp /path/to/your/weights.pt models/weights.pt
+
+# Build the image
+docker build -t helmet-contact-detection:latest .
+
+# Run
+docker run -p 8000:8000 helmet-contact-detection:latest
+```
+
+### Option B: Mount weights at runtime (recommended)
+
+Keep weights separate and mount them as a volume:
+
+```bash
+# Build the image once (no weights needed)
+docker build -t helmet-contact-detection:latest .
+
+# Run with volume-mounted weights
+docker run \
+  -p 8000:8000 \
+  -v /path/to/your/weights.pt:/app/models/weights.pt:ro \
+  helmet-contact-detection:latest
+```
+
+This approach allows you to:
+- Update weights without rebuilding the image
+- Keep weights out of version control
+- Use different weights for different runs
 
 ## Utilities
 
@@ -324,17 +362,15 @@ The current implementation uses geometric heuristics:
 - Learned contact classifier
 - Player tracking integration
 
-## Performance
+## Performance Notes
 
-**Expected Performance (CPU):**
-- Single frame inference: 100-300ms
-- Video clip (30 frames): 3-8 seconds
+Inference speed varies based on hardware, image resolution, and model size. CPU inference is functional but slower than GPU.
 
 **Optimization Tips:**
 - Use GPU for faster inference (requires CUDA-enabled Docker image)
 - Reduce image resolution for faster processing
 - Adjust `max_frames` parameter for video clips
-- Lower confidence threshold for more detections
+- Use smaller YOLO models (e.g., YOLOv8n vs YOLOv8x)
 
 ## Limitations
 

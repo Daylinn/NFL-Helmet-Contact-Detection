@@ -16,15 +16,6 @@ from app.schemas import (
 )
 from app.utils import load_image_from_bytes, load_video_from_bytes
 
-@app.get("/")
-def root():
-    return {
-        "name": "Helmet Contact Detection API",
-        "health": "/health",
-        "docs": "/docs",
-        "predict_frame": "/predict_frame"
-    }
-
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
@@ -78,6 +69,26 @@ app = FastAPI(
 )
 
 
+@app.get("/")
+async def root():
+    """
+    Root endpoint with API information and links.
+
+    Returns:
+        JSON with API name and endpoint links
+    """
+    return {
+        "name": "NFL Helmet Contact Detection API",
+        "version": "1.0.0",
+        "endpoints": {
+            "health": "/health",
+            "docs": "/docs",
+            "predict_frame": "/predict_frame",
+            "predict_clip": "/predict_clip"
+        }
+    }
+
+
 @app.get("/health", response_model=HealthResponse)
 async def health_check():
     """
@@ -86,9 +97,17 @@ async def health_check():
     Returns:
         HealthResponse with service status and model load state
     """
+    weights_loaded = detector.weights_loaded if detector else False
+
+    if weights_loaded:
+        message = "Model weights loaded and ready for inference"
+    else:
+        message = "Model weights not loaded - predictions will fail until weights.pt is provided"
+
     return HealthResponse(
         status="healthy",
-        weights_loaded=detector.weights_loaded if detector else False,
+        weights_loaded=weights_loaded,
+        message=message,
         version="1.0.0"
     )
 
@@ -107,10 +126,10 @@ async def predict_frame(file: UploadFile = File(...)):
     Raises:
         HTTPException: If model not loaded or processing fails
     """
-    if not detector or not detector.is_loaded:
+    if not detector or not detector.weights_loaded:
         raise HTTPException(
             status_code=503,
-            detail="Model not loaded. Please check server logs and ensure model weights are present."
+            detail="Model weights not loaded. Please provide weights.pt file - see README for instructions."
         )
 
     try:
@@ -160,10 +179,10 @@ async def predict_clip(
     Raises:
         HTTPException: If model not loaded or processing fails
     """
-    if not detector or not detector.is_loaded:
+    if not detector or not detector.weights_loaded:
         raise HTTPException(
             status_code=503,
-            detail="Model not loaded. Please check server logs and ensure model weights are present."
+            detail="Model weights not loaded. Please provide weights.pt file - see README for instructions."
         )
 
     if max_frames < 1 or max_frames > 100:
