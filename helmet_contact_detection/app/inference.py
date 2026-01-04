@@ -93,7 +93,7 @@ class HelmetContactDetector:
         Raises:
             RuntimeError: If model not loaded
         """
-        if not self.is_loaded:
+        if not self.weights_loaded:
             raise RuntimeError("Model not loaded. Call load_model() first.")
 
         start_time = time.time()
@@ -137,7 +137,7 @@ class HelmetContactDetector:
         Raises:
             RuntimeError: If model not loaded
         """
-        if not self.is_loaded:
+        if not self.weights_loaded:
             raise RuntimeError("Model not loaded. Call load_model() first.")
 
         start_time = time.time()

@@ -52,6 +52,7 @@ class HealthResponse(BaseModel):
     """Health check response."""
     status: str = Field(default="healthy")
     weights_loaded: bool
+    message: str
     version: str = Field(default="1.0.0")
 
 
