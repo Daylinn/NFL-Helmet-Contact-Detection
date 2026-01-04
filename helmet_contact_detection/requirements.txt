@@ -1,0 +1,20 @@
+# Core API dependencies
+fastapi==0.109.0
+uvicorn[standard]==0.27.0
+python-multipart==0.0.6
+pydantic==2.5.3
+
+# Computer Vision and ML
+ultralytics==8.1.0
+opencv-python-headless==4.9.0.80
+pillow==10.2.0
+numpy==1.26.3
+
+# Utilities
+python-dotenv==1.0.0
+
+# Optional: For development/testing
+# pytest==7.4.4
+# httpx==0.26.0
+# black==23.12.1
+# flake8==7.0.0

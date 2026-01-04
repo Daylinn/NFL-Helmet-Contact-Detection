@@ -1,0 +1,2 @@
+# This file ensures the models directory is tracked in git
+# Actual model weights (weights.pt) should not be committed
