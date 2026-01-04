@@ -42,7 +42,7 @@ class HelmetContactDetector:
         self.model_path = Path(model_path)
         self.confidence_threshold = confidence_threshold
         self.model = None
-        self._model_loaded = False
+        self._weights_loaded = False
 
         # Contact detection thresholds
         self.iou_threshold = 0.1  # Minimum IoU to consider contact
@@ -69,16 +69,16 @@ class HelmetContactDetector:
 
             logger.info(f"Loading YOLO model from {self.model_path}")
             self.model = YOLO(str(self.model_path))
-            self._model_loaded = True
+            self._weights_loaded = True
             logger.info("Model loaded successfully")
 
         except Exception as e:
             raise RuntimeError(f"Failed to load model: {str(e)}")
 
     @property
-    def is_loaded(self) -> bool:
+    def weights_loaded(self) -> bool:
         """Check if model is loaded."""
-        return self._model_loaded
+        return self._weights_loaded
 
     def predict_frame(self, image: np.ndarray) -> FramePredictionResponse:
         """

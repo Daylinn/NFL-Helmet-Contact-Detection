@@ -16,6 +16,15 @@ from app.schemas import (
 )
 from app.utils import load_image_from_bytes, load_video_from_bytes
 
+@app.get("/")
+def root():
+    return {
+        "name": "Helmet Contact Detection API",
+        "health": "/health",
+        "docs": "/docs",
+        "predict_frame": "/predict_frame"
+    }
+
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
@@ -79,7 +88,7 @@ async def health_check():
     """
     return HealthResponse(
         status="healthy",
-        model_loaded=detector.is_loaded if detector else False,
+        weights_loaded=detector.weights_loaded if detector else False,
         version="1.0.0"
     )
 

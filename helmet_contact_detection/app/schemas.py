@@ -51,7 +51,7 @@ class ClipPredictionResponse(BaseModel):
 class HealthResponse(BaseModel):
     """Health check response."""
     status: str = Field(default="healthy")
-    model_loaded: bool
+    weights_loaded: bool
     version: str = Field(default="1.0.0")
 
 
