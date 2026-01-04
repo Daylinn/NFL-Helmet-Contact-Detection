@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: nfl-helmet-detection
+    env: docker
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: MODEL_PATH
+        value: /app/models/weights.pt
+      - key: CONFIDENCE_THRESHOLD
+        value: 0.25
+      - key: PORT
+        value: 8000
