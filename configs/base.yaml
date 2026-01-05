@@ -1,0 +1,101 @@
+# Base configuration for NFL Impact Detection
+
+# Data settings
+data:
+  raw_dir: "data/raw"
+  processed_dir: "data/processed"
+  crops_dir: "data/processed/crops"
+  metadata_file: "data/processed/metadata.parquet"
+
+  # Tiny mode for fast development
+  tiny_mode: false
+  tiny_videos: 5
+  tiny_max_samples: 500
+
+  # Impact filtering (definitive impacts)
+  impact_filter:
+    require_impact: true  # impact == 1
+    min_confidence: 0.5  # if confidence column exists
+    min_visibility: 0.5  # if visibility column exists
+
+  # Crop settings
+  crop_size: 224
+  temporal_frames: 1  # 1 for single frame, 5 for temporal stack
+  temporal_window: 2  # frames before/after (total = 2*window+1)
+
+# Model settings
+model:
+  architecture: "resnet18"  # timm model name
+  pretrained: true
+  num_classes: 2  # binary: impact vs no-impact
+  dropout: 0.3
+  input_size: 224
+
+# Training settings
+training:
+  seed: 42
+  batch_size: 32
+  num_workers: 4
+  epochs: 20
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  scheduler: "cosine"  # cosine, step, none
+
+  # Early stopping
+  patience: 5
+  min_delta: 0.001
+
+  # Data split
+  val_split: 0.2
+  split_by_play: true  # split by (gameKey, playID) to avoid leakage
+
+  # Class balancing
+  balance_classes: true
+  pos_weight: 2.0  # weight for positive class in loss
+
+# Evaluation
+evaluation:
+  metrics:
+    - "accuracy"
+    - "precision"
+    - "recall"
+    - "f1"
+    - "auc_pr"
+  threshold: 0.5
+  save_predictions: true
+
+# Inference settings
+inference:
+  model_path: "models/best.pt"
+  onnx_path: "models/model.onnx"
+  use_onnx: false
+
+  # Helmet detection
+  detector_model: "yolov8n.pt"  # ultralytics model
+  detector_conf: 0.3
+  detector_iou: 0.5
+  helmet_class_id: 0  # YOLOv8 person=0, we'll use it as proxy for helmet
+
+  # Video processing
+  sample_rate: 5  # process every N frames
+  min_score: 0.5  # minimum impact confidence to report
+
+  # Output
+  annotate_video: true
+  annotation_color: [0, 0, 255]  # BGR red
+  annotation_thickness: 2
+
+# API settings
+api:
+  host: "0.0.0.0"
+  port: 8000
+  max_upload_size: 524288000  # 500MB
+  allowed_extensions: [".mp4", ".avi", ".mov"]
+  temp_dir: "/tmp/impact_detector"
+
+# Paths
+paths:
+  models_dir: "models"
+  checkpoints_dir: "models/checkpoints"
+  logs_dir: "logs"
+  outputs_dir: "outputs"

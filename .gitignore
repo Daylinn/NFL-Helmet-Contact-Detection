@@ -1,5 +1,62 @@
-# data / datasets
-data/
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv
+
+# Testing
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.mypy_cache/
+.ruff_cache/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Data and datasets
+data/raw/*
+!data/raw/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
 datasets/
 *.csv
 *.parquet
@@ -7,22 +64,42 @@ datasets/
 *.tar
 *.gz
 
-# videos / images
+# Videos and images
 *.mp4
 *.mov
 *.avi
+*.jpg
+*.jpeg
+*.png
 
-# model artifacts
-*.pt
-*.pth
-*.onnx
-*.h5
+# Model artifacts
+models/*.pt
+models/*.pth
+models/*.onnx
+models/*.h5
+models/checkpoints/*
+!models/.gitkeep
+!models/checkpoints/.gitkeep
 *.pkl
 *.joblib
 
-# notebooks checkpoints
+# Logs and outputs
+logs/
+*.log
+outputs/
+
+# Temporary files
+tmp/
+*.tmp
+/tmp/impact_detector/
+
+# Environment variables
+.env
+.env.local
+
+# Notebooks
 .ipynb_checkpoints/
+*.ipynb
 
-# OS cruft
-.DS_Store
-
+# Kaggle
+kaggle.json

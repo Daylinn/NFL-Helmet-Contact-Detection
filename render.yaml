@@ -1,0 +1,17 @@
+# Render deployment configuration
+# See: https://render.com/docs/blueprint-spec
+
+services:
+  - type: web
+    name: nfl-impact-detector
+    env: docker
+    plan: starter  # or free tier
+    region: oregon  # Choose closest region
+    envVars:
+      - key: PORT
+        value: 8000
+      - key: PYTHONUNBUFFERED
+        value: 1
+    healthCheckPath: /health
+    dockerfilePath: ./Dockerfile
+    dockerContext: .

@@ -1,0 +1,18 @@
+# Tiny configuration for fast development and testing
+
+# Inherits from base.yaml, overrides for speed
+
+data:
+  tiny_mode: true
+  tiny_videos: 3
+  tiny_max_samples: 200
+
+training:
+  batch_size: 16
+  num_workers: 2
+  epochs: 5
+  patience: 3
+
+model:
+  architecture: "resnet18"  # Keep lightweight
+  dropout: 0.2
