@@ -48,6 +48,9 @@ dev = [
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
+[tool.hatch.build.targets.wheel]
+packages = ["src/impact_detector"]
+
 [tool.ruff]
 line-length = 100
 target-version = "py311"
